@@ -1,11 +1,14 @@
-from typing import Any, Optional
-from fastapi import Depends, FastAPI, HTTPException, Query
-from sqlalchemy.orm import Session
 import json
-from . import models, schemas, db_interaction
-from .database import SessionLocal, engine
-from starlette.responses import Response
+from typing import Any, Optional
+
+from fastapi import Depends, FastAPI, HTTPException, Query
 from fastapi.encoders import jsonable_encoder
+from sqlalchemy.orm import Session
+from starlette.responses import Response
+
+from . import db_interaction, models, schemas
+from .database import SessionLocal, engine
+
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
@@ -46,7 +49,7 @@ class JSONResponse(Response):
         ).encode("utf-8")
 
 
-@app.get('/api/titles/', response_model=list[schemas.Title], response_class=JSONResponse)
+@app.get('/api/titles/', response_model=list[schemas.Titles], response_class=JSONResponse)
 def get_titles(
         title_class: Optional[str] = None,
         _order: str = 'asc',
@@ -65,3 +68,7 @@ def get_titles(
         limit=_limit,
     )
     return titles
+
+@app.get('/api/titles/{title_id}', response_model=schemas.Title, response_class=JSONResponse)
+def get_title_by_id(title_id: int, db: Session = Depends(get_db)):
+    return db_interaction.get_title_by_id(db, title_id)

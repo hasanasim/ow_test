@@ -1,9 +1,11 @@
 from typing import Optional
-from sqlalchemy.orm import Session
+
 from sqlalchemy import asc, desc, func, text
+from sqlalchemy.orm import Session, load_only
+
 from . import models, schemas
 
-from sqlalchemy.orm import load_only
+
 def get_titles(
         db: Session,
         _sort: str, 
@@ -26,7 +28,10 @@ def get_titles(
     elif _order == 'asc' and ',' not in _sort:
         q = q.order_by(asc(_sort))
     return q.offset(skip).limit(limit).all()
-    
+
+def get_title_by_id(db: Session, id: int):
+    return db.query(models.Title).filter(models.Title.id==id).first()
+
 
 def create_title(db: Session, title: schemas.TitleCreate):
     db_title = models.Title(

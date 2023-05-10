@@ -1,8 +1,10 @@
+from enum import Enum
+
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
-from .database import Base
 from sqlalchemy_utils.types.choice import ChoiceType
-from enum import Enum
+
+from .database import Base
 
 
 class TitleClassEnum(Enum):
