@@ -8,8 +8,8 @@ from . import models, schemas
 
 def get_titles(
     db: Session,
-    _sort: str,
-    _order: str,
+    _sort: str = 'id',
+    _order: str = 'asc',
     skip: int = 0,
     limit: int = 1000,
     title_class: Optional[str] = None,

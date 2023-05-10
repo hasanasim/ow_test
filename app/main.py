@@ -48,7 +48,7 @@ class JSONResponse(Response):
         return json.dumps(content, indent=4).encode("utf-8")
 
 
-@app.get('/api/titles/', response_model=list[schemas.TitleWithoutContent], response_class=JSONResponse)
+@app.get('/api/titles/', response_model=list[schemas.TitleBase], response_class=JSONResponse)
 def get_titles(
     title_class: Optional[str] = None,
     _order: str = 'asc',
